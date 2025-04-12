@@ -1,28 +1,28 @@
 """
-Command-line interface for the dshelper package.
+Command-line interface for the dshelpertool package.
 """
 import argparse
 import os
 import sys
 import pandas as pd
-from dshelper import __version__
-from dshelper import overview, cleaning, dtypes, eda, stats, viz, report
+from dshelpertool import __version__
+from dshelpertool import overview, cleaning, dtypes, eda, stats, viz, report
 
 
 def main():
     """Main entry point for the CLI."""
     parser = argparse.ArgumentParser(
-        description="DSHelper: A lightweight helper package for data science and analysis tasks."
+        description="DSHelperTool: A lightweight helper package for data science and analysis tasks."
     )
-    
+
     # Add version argument
     parser.add_argument(
-        "--version", action="version", version=f"dshelper {__version__}"
+        "--version", action="version", version=f"dshelpertool {__version__}"
     )
-    
+
     # Add subparsers for different commands
     subparsers = parser.add_subparsers(dest="command", help="Command to run")
-    
+
     # Overview command
     overview_parser = subparsers.add_parser(
         "overview", help="Get a quick overview of a DataFrame"
@@ -33,7 +33,7 @@ def main():
     overview_parser.add_argument(
         "--name", help="Name of the DataFrame", default="DataFrame"
     )
-    
+
     # Clean command
     clean_parser = subparsers.add_parser(
         "clean", help="Clean a DataFrame"
@@ -47,7 +47,7 @@ def main():
     clean_parser.add_argument(
         "--output", help="Path to save the cleaned file", default=None
     )
-    
+
     # Report command
     report_parser = subparsers.add_parser(
         "report", help="Generate a report for a DataFrame"
@@ -68,15 +68,15 @@ def main():
     report_parser.add_argument(
         "--plots", action="store_true", help="Include plots in the report"
     )
-    
+
     # Parse arguments
     args = parser.parse_args()
-    
+
     # If no command is provided, print help
     if args.command is None:
         parser.print_help()
         return
-    
+
     # Load the file
     try:
         if args.file.endswith(".csv"):
@@ -90,16 +90,16 @@ def main():
     except Exception as e:
         print(f"Error loading file: {e}")
         return
-    
+
     # Execute the command
     if args.command == "overview":
         overview.quick_look(df, name=args.name)
-    
+
     elif args.command == "clean":
         # Clean the DataFrame
         if args.standardize:
             df = cleaning.update_col(df, standardize_col=True)
-        
+
         # Save the cleaned DataFrame
         if args.output:
             if args.output.endswith(".csv"):
@@ -110,13 +110,13 @@ def main():
                 print(f"Error: Unsupported output format: {args.output}")
                 print("Supported formats: .csv, .xls, .xlsx")
                 return
-            
+
             print(f"Cleaned DataFrame saved to {args.output}")
         else:
             # Print the first few rows
             print("Cleaned DataFrame:")
             print(df.head())
-    
+
     elif args.command == "report":
         # Generate the report
         result = report.generate_summary_report(
@@ -126,7 +126,7 @@ def main():
             output_format=args.format,
             output_path=args.output
         )
-        
+
         # If output_path is None, print the report
         if args.output is None:
             print(result)

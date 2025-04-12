@@ -4,18 +4,18 @@ with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
-    name="dshelper",
+    name="dshelpertool",
     version="0.1.0",
     author="Utkarsh Shashinandan Pandey",
     author_email="utkarshpandey8977@gmail.com",
     description="A lightweight helper package for data science and analysis tasks",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/utkarsh820/dshelper",
+    url="https://github.com/utkarsh820/dshelpertool",
     project_urls={
-        "Bug Tracker": "https://github.com/utkarsh820/dshelper/issues",
-        "Documentation": "https://github.com/utkarsh820/dshelper#readme",
-        "Source Code": "https://github.com/utkarsh820/dshelper",
+        "Bug Tracker": "https://github.com/utkarsh820/dshelpertool/issues",
+        "Documentation": "https://github.com/utkarsh820/dshelpertool#readme",
+        "Source Code": "https://github.com/utkarsh820/dshelpertool",
     },
     packages=find_packages(),
     classifiers=[
@@ -60,7 +60,7 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            "dshelper=dshelper.cli:main",
+            "dshelpertool=dshelpertool.cli:main",
         ],
     },
     keywords="data-science helper pandas numpy eda",

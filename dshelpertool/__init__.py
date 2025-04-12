@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-DSHelper: A lightweight helper package for data science and analysis tasks.
+DSHelperTool: A lightweight helper package for data science and analysis tasks.
 """
 
 __version__ = "0.1.0"

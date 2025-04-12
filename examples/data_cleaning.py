@@ -1,19 +1,19 @@
 """
-Data cleaning examples for the dshelper package.
+Data cleaning examples for the dshelpertool package.
 """
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Import dshelper modules
-from dshelper import cleaning, dtypes, eda
+# Import dshelpertool modules
+from dshelpertool import cleaning, dtypes, eda
 
 # Load a messy dataset
 def create_messy_data(rows=1000):
     """Create a messy DataFrame for demonstration."""
     np.random.seed(42)
-    
+
     # Create a date range with some invalid dates
     dates = []
     for i in range(rows):
@@ -23,7 +23,7 @@ def create_messy_data(rows=1000):
             dates.append(None)
         else:
             dates.append(pd.Timestamp('2021-01-01') + pd.Timedelta(days=i))
-    
+
     # Create numeric columns with some invalid values
     numeric1 = []
     numeric2 = []
@@ -37,11 +37,11 @@ def create_messy_data(rows=1000):
         else:
             numeric1.append(np.random.normal(loc=50, scale=10))
             numeric2.append(np.random.exponential(scale=10))
-    
+
     # Create categorical columns with inconsistent values
     categories = ['Category A', 'Category B', 'Category C', 'category a', 'category b', 'CATEGORY C']
     cat1 = np.random.choice(categories, size=rows)
-    
+
     # Create a column with mixed types
     mixed = []
     for i in range(rows):
@@ -51,7 +51,7 @@ def create_messy_data(rows=1000):
             mixed.append(f"String {i}")
         else:
             mixed.append(f"{i}.{i}")
-    
+
     # Create a column with extra spaces and special characters
     text = []
     for i in range(rows):
@@ -63,7 +63,7 @@ def create_messy_data(rows=1000):
             text.append(f"Text_with_underscores_{i}")
         else:
             text.append(f"Text with special chars: {i}!")
-    
+
     # Create a DataFrame with messy column names
     df = pd.DataFrame({
         ' Date Column ': dates,
@@ -73,7 +73,7 @@ def create_messy_data(rows=1000):
         'Mixed Types': mixed,
         'TEXT WITH SPACES': text
     })
-    
+
     return df
 
 # Create a messy DataFrame
@@ -108,7 +108,7 @@ print("Categorical column type:", df_clean["categorical_column"].dtype)
 
 # Step 3: Clean text data
 print("\n=== Step 3: Clean Text Data ===")
-df_clean = cleaning.clean_text(df_clean, columns=["text_with_spaces"], 
+df_clean = cleaning.clean_text(df_clean, columns=["text_with_spaces"],
                               lower=True, strip=True, remove_special=True)
 print("Cleaned text sample:")
 print(df_clean["text_with_spaces"].head())
@@ -124,7 +124,7 @@ category_mapping = {
     'category b': 'category_b',
     'CATEGORY C': 'category_c'
 }
-df_clean = cleaning.replace_values(df_clean, columns=["categorical_column"], 
+df_clean = cleaning.replace_values(df_clean, columns=["categorical_column"],
                                   to_replace=category_mapping)
 print("Standardized categories:")
 print(df_clean["categorical_column"].value_counts())
@@ -136,7 +136,7 @@ missing_before = df_clean.isnull().sum().sum()
 print(f"Missing values before: {missing_before}")
 
 # Fill missing values in numeric columns with mean
-df_clean = eda.fill_missing(df_clean, method="mean", 
+df_clean = eda.fill_missing(df_clean, method="mean",
                            cols=["numeric_column_1", "numeric_column_2"])
 
 # Fill missing values in date column with forward fill
@@ -164,9 +164,9 @@ df_clean.loc[0, "numeric_column_1"] = 1000  # Far from the mean of ~50
 df_clean.loc[1, "numeric_column_2"] = 500   # Far from the mean of ~10
 
 # Detect outliers
-from dshelper import stats
-outliers, outlier_counts = stats.outlier_detection(df_clean, 
-                                                 cols=["numeric_column_1", "numeric_column_2"], 
+from dshelpertool import stats
+outliers, outlier_counts = stats.outlier_detection(df_clean,
+                                                 cols=["numeric_column_1", "numeric_column_2"],
                                                  method="iqr")
 
 print("Outlier counts:")

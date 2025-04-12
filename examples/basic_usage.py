@@ -1,35 +1,35 @@
 """
-Basic usage examples for the dshelper package.
+Basic usage examples for the dshelpertool package.
 """
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Import dshelper modules
-from dshelper import overview, cleaning, dtypes, eda, stats, viz
+# Import dshelpertool modules
+from dshelpertool import overview, cleaning, dtypes, eda, stats, viz
 
 # Create a sample DataFrame
 def create_sample_data(rows=1000):
     """Create a sample DataFrame for demonstration."""
     np.random.seed(42)
-    
+
     # Create a date range
     dates = pd.date_range('2021-01-01', periods=rows)
-    
+
     # Create numeric columns with different distributions
     normal = np.random.normal(loc=50, scale=10, size=rows)
     skewed = np.random.exponential(scale=10, size=rows)
     uniform = np.random.uniform(low=0, high=100, size=rows)
-    
+
     # Create categorical columns
     categories = ['A', 'B', 'C', 'D', 'E']
     cat1 = np.random.choice(categories, size=rows, p=[0.4, 0.3, 0.15, 0.1, 0.05])
     cat2 = np.random.choice(categories, size=rows)
-    
+
     # Create a boolean column
     boolean = np.random.choice([True, False], size=rows)
-    
+
     # Create a DataFrame
     df = pd.DataFrame({
         'date': dates,
@@ -40,12 +40,12 @@ def create_sample_data(rows=1000):
         'category2': cat2,
         'boolean': boolean
     })
-    
+
     # Add some missing values
     for col in df.columns:
         mask = np.random.random(size=rows) < 0.05  # 5% missing values
         df.loc[mask, col] = np.nan
-    
+
     return df
 
 # Create a sample DataFrame

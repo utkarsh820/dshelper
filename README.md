@@ -1,11 +1,11 @@
-# DSHelper
+# DSHelperTool
 
-A lightweight helper package for data science and analysis tasks. DSHelper aims to reduce the hassle of common data analysis tasks by 80-90% with simple, intuitive functions.
+A lightweight helper package for data science and analysis tasks. DSHelperTool aims to reduce the hassle of common data analysis tasks by 80-90% with simple, intuitive functions.
 
 ## Installation
 
 ```bash
-pip install dshelper
+pip install dshelpertool
 ```
 
 ## Features
@@ -22,7 +22,7 @@ pip install dshelper
 
 ```python
 import pandas as pd
-from dshelper import overview as ov
+from dshelpertool import overview as ov
 
 # Load your data
 df = pd.read_csv("your_data.csv")
@@ -34,7 +34,7 @@ ov.quick_look(df, name="My Dataset")
 ### Clean Column Names
 
 ```python
-from dshelper import cleaning as cl
+from dshelpertool import cleaning as cl
 
 # Standardize all column names (lowercase with underscores)
 df = cl.update_col(df, standardize_col=True)
@@ -46,7 +46,7 @@ df = cl.update_col(df, rename_dict={"Old Name": "new_name", "Another Column": "a
 ### Handle Data Types
 
 ```python
-from dshelper import dtypes as dt
+from dshelpertool import dtypes as dt
 
 # Convert columns to numeric
 df = dt.to_numeric_cols(df, ["quantity", "price", "amount"])
@@ -58,7 +58,7 @@ df = dt.to_datetime_cols(df, "transaction_date")
 ### Analyze Categorical Data
 
 ```python
-from dshelper import overview as ov
+from dshelpertool import overview as ov
 
 # Get value counts for all categorical columns
 result = ov.value_counts_all(df, top_n=5)
@@ -70,7 +70,7 @@ ov.plot_value_counts(df, columns=["category", "status"], top_n=5)
 ### Check for Skewness
 
 ```python
-from dshelper import eda
+from dshelpertool import eda
 
 # Check skewness of numeric columns
 eda.check_skew(df, cols=["price", "quantity"])
@@ -85,8 +85,8 @@ eda.plot_skew(df, cols=["price", "quantity"])
 
 ```bash
 # Clone the repository
-git clone https://github.com/uumap/dshelper.git
-cd dshelper
+git clone https://github.com/uumap/dshelpertool.git
+cd dshelpertool
 
 # Install in development mode with development dependencies
 pip install -e .[dev]
