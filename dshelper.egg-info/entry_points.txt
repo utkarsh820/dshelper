@@ -1,0 +1,2 @@
+[console_scripts]
+dshelper = dshelper.cli:main
