@@ -79,9 +79,51 @@ eda.check_skew(df, cols=["price", "quantity"])
 eda.plot_skew(df, cols=["price", "quantity"])
 ```
 
+## Development
+
+### Setting up the Development Environment
+
+```bash
+# Clone the repository
+git clone https://github.com/uumap/dshelper.git
+cd dshelper
+
+# Install in development mode with development dependencies
+pip install -e .[dev]
+
+# Run tests
+python -m pytest
+```
+
+### GitHub Actions Workflows
+
+This project uses GitHub Actions for continuous integration and deployment:
+
+1. **Python Tests** (`python-test.yml`): Runs on every push to main and pull request
+   - Runs tests on multiple Python versions
+   - Performs linting with flake8
+   - Checks code formatting with black
+   - Checks import order with isort
+   - Reports test coverage
+
+2. **Publish Python Package** (`python-publish.yml`): Runs when a new release is created
+   - Tests the package on multiple Python versions
+   - Builds the package
+   - Publishes to PyPI
+
+To manually trigger the test workflow, go to the Actions tab in your GitHub repository and select "Python Tests" workflow, then click "Run workflow".
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Here's how you can contribute:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes
+4. Run the tests (`pytest`)
+5. Commit your changes (`git commit -m 'Add some amazing feature'`)
+6. Push to the branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
 ## License
 
