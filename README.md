@@ -128,3 +128,173 @@ Contributions are welcome! Here's how you can contribute:
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+# DSHelperTool Documentation
+
+## Overview
+DSHelperTool is a lightweight helper package for data science and analysis tasks. Below is a comprehensive list of functions available in the package, along with their use cases and examples.
+
+---
+
+## Cleaning Module
+
+### `drop_cols`
+**Description:** Drop specified columns from a DataFrame.
+**Parameters:**
+- `df`: Input DataFrame.
+- `cols`: List of columns to drop.
+**Example:**
+```python
+from dshelpertool.cleaning import drop_cols
+cleaned_df = drop_cols(df, cols=['unnecessary_column'])
+```
+
+### `update_col`
+**Description:** Update column names or standardize them.
+**Parameters:**
+- `df`: Input DataFrame.
+- `rename_dict`: Dictionary for renaming columns.
+- `standardize_col`: Boolean to standardize column names.
+**Example:**
+```python
+from dshelpertool.cleaning import update_col
+updated_df = update_col(df, rename_dict={'OldName': 'NewName'})
+```
+
+---
+
+## EDA Module
+
+### `check_skew`
+**Description:** Check skewness of numeric columns.
+**Parameters:**
+- `df`: Input DataFrame.
+- `cols`: List of columns to check skewness.
+**Example:**
+```python
+from dshelpertool.eda import check_skew
+check_skew(df, cols=['column1', 'column2'])
+```
+
+### `plot_skew`
+**Description:** Plot histograms to visualize skewness.
+**Parameters:**
+- `df`: Input DataFrame.
+- `cols`: List of columns to plot.
+- `bins`: Number of bins for histograms.
+**Example:**
+```python
+from dshelpertool.eda import plot_skew
+plot_skew(df, cols=['column1', 'column2'], bins=20)
+```
+
+---
+
+## Visualization Module
+
+### `plot_distributions`
+**Description:** Plot distributions of numeric columns.
+**Parameters:**
+- `df`: Input DataFrame.
+- `cols`: List of columns to plot.
+- `bins`: Number of bins for histograms.
+**Example:**
+```python
+from dshelpertool.viz import plot_distributions
+plot_distributions(df, cols=['column1', 'column2'], bins=30)
+```
+
+### `plot_categorical`
+**Description:** Plot bar charts for categorical columns.
+**Parameters:**
+- `df`: Input DataFrame.
+- `cols`: List of columns to plot.
+- `top_n`: Number of top categories to display.
+**Example:**
+```python
+from dshelpertool.viz import plot_categorical
+plot_categorical(df, cols=['category_column'], top_n=5)
+```
+
+### `plot_correlation`
+**Description:** Plot correlation matrix for numeric columns.
+**Parameters:**
+- `df`: Input DataFrame.
+- `method`: Correlation method ('pearson', 'kendall', 'spearman').
+**Example:**
+```python
+from dshelpertool.viz import plot_correlation
+plot_correlation(df, method='pearson')
+```
+
+---
+
+## Statistics Module
+
+### `correlation_matrix`
+**Description:** Calculate and visualize the correlation matrix.
+**Parameters:**
+- `df`: Input DataFrame.
+- `method`: Correlation method ('pearson', 'kendall', 'spearman').
+**Example:**
+```python
+from dshelpertool.stats import correlation_matrix
+correlation_matrix(df, method='spearman')
+```
+
+### `hypothesis_test`
+**Description:** Perform hypothesis tests to compare groups.
+**Parameters:**
+- `df`: Input DataFrame.
+- `group_col`: Column containing group labels.
+- `value_col`: Column containing values to compare.
+**Example:**
+```python
+from dshelpertool.stats import hypothesis_test
+hypothesis_test(df, group_col='group', value_col='value', test_type='ttest')
+```
+
+---
+
+## Overview Module
+
+### `quick_look`
+**Description:** Get a quick overview of a DataFrame.
+**Parameters:**
+- `df`: Input DataFrame.
+- `name`: Name of the DataFrame.
+**Example:**
+```python
+from dshelpertool.overview import quick_look
+quick_look(df, name='My Dataset')
+```
+
+### `get_duplicates`
+**Description:** Identify duplicate rows in a DataFrame.
+**Parameters:**
+- `df`: Input DataFrame.
+- `subset`: Columns to consider for identifying duplicates.
+**Example:**
+```python
+from dshelpertool.overview import get_duplicates
+duplicates = get_duplicates(df, subset=['column1'])
+```
+
+---
+
+## Report Module
+
+### `export_to_excel`
+**Description:** Export DataFrame to an Excel file.
+**Parameters:**
+- `df`: Input DataFrame.
+- `filename`: Name of the Excel file.
+**Example:**
+```python
+from dshelpertool.report import export_to_excel
+export_to_excel(df, filename='output.xlsx')
+```
+
+---
+
+This documentation provides a detailed overview of the functions available in DSHelperTool. For more examples and advanced usage, refer to the examples folder in the project.

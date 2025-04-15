@@ -8,24 +8,46 @@ import pandas as pd
 
 def quick_look(df, name="DataFrame", include_describe=True, include_info=True):
     """
-    Provides a comprehensive overview of a DataFrame.
+    Provides a comprehensive overview of a DataFrame with key statistics and information.
 
-    Parameters:
+    This function generates a summary of the DataFrame including shape, data types,
+    missing values, unique values, and basic statistics. It prints the summary to
+    the console and returns it as a dictionary for further analysis.
+
+    Parameters
     ----------
     df : pandas.DataFrame
-        The input DataFrame.
+        The DataFrame to analyze.
     name : str, default="DataFrame"
-        Name to display for the DataFrame.
+        Name to display for the DataFrame in the output.
     include_describe : bool, default=True
-        Whether to include the describe() output.
+        Whether to include pandas describe() statistics in the output.
     include_info : bool, default=True
-        Whether to include the info() output.
+        Whether to include pandas info() in the console output.
 
-    Returns:
+    Returns
     -------
     dict
-        Dictionary containing summary statistics and information about the DataFrame.
+        Dictionary containing summary statistics and information with keys:
+        - name: The DataFrame name
+        - shape: Tuple of (rows, columns)
+        - columns: List of column names
+        - dtypes: Dictionary of column data types
+        - missing_values: Dictionary of missing value counts by column
+        - missing_percentage: Dictionary of missing value percentages by column
+        - unique_values: Dictionary of unique value counts by column
+        - describe: Dictionary of descriptive statistics (if include_describe=True)
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from dshelpertool.overview import quick_look
+    >>> df = pd.DataFrame({'A': [1, 2, 3], 'B': ['a', 'b', None]})
+    >>> summary = quick_look(df, name="My Dataset")
+    >>> summary['missing_values']
+    {'A': 0, 'B': 1}
     """
+
     summary = {}
     summary["name"] = name
     summary["shape"] = df.shape
@@ -130,28 +152,49 @@ def get_duplicates(df, subset=None, keep="first"):
 
 def value_counts_all(df, top_n=5):
     """
-    Returns top N frequent values for all object/categorical columns.
+    Analyze frequency distributions for all categorical and text columns in a DataFrame.
 
-    Parameters:
+    This function identifies all object and categorical columns in the DataFrame and
+    calculates the frequency distribution of values in each column. It returns the top N
+    most frequent values for each column along with their counts and percentages.
+
+    Parameters
     ----------
     df : pandas.DataFrame
-        The input DataFrame.
+        The DataFrame to analyze.
     top_n : int, default=5
-        Number of top values to return for each column.
+        Number of most frequent values to return for each column.
 
-    Returns:
+    Returns
     -------
     dict
-        Dictionary with column names as keys and DataFrames of value counts as values.
-        Each DataFrame contains the top N values and their counts for that column.
+        Dictionary where:
+        - Keys are column names of categorical/text columns
+        - Values are DataFrames with columns:
+          * Original column name: The categorical value
+          * 'count': Frequency count of that value
+          * 'percentage': Percentage of total rows with that value
 
-    Example:
-    -------
-    >>> result = value_counts_all(df, top_n=3)
-    >>> for col, counts in result.items():
-    ...     print(f"\n{col}:")
-    ...     print(counts)
+    Notes
+    -----
+    The function automatically prints the results to the console in addition to
+    returning them as a dictionary.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from dshelpertool.overview import value_counts_all
+    >>> df = pd.DataFrame({
+    ...     'category': ['A', 'B', 'A', 'C', 'B', 'A'],
+    ...     'status': ['active', 'inactive', 'active', 'active', 'inactive', 'pending']
+    ... })
+    >>> result = value_counts_all(df, top_n=2)
+    >>> result['category']
+       category  count percentage
+    0        A      3      50.0%
+    1        B      2      33.3%
     """
+
     # Select only object and categorical columns
     obj_cols = df.select_dtypes(include=["object", "category"]).columns
 
@@ -377,30 +420,53 @@ def column_info(df, column=None):
 
 def find_outliers(df, columns=None, method="iqr", threshold=1.5):
     """
-    Find outliers in numeric columns using different methods.
+    Detect outliers in numeric columns using statistical methods.
 
-    Parameters:
+    This function identifies outliers in numeric columns using one of three statistical
+    methods: Interquartile Range (IQR), Z-score, or Standard Deviation. It returns both
+    the identified outliers and the statistical parameters used for detection.
+
+    Parameters
     ----------
     df : pandas.DataFrame
-        The input DataFrame.
-    columns : list or None, default=None
+        The DataFrame to analyze for outliers.
+    columns : list of str or None, default=None
         List of column names to check for outliers. If None, all numeric columns are used.
-    method : str, default='iqr'
-        Method to use for outlier detection:
-        - 'iqr': Interquartile Range method
-        - 'zscore': Z-score method
-        - 'std': Standard Deviation method
+    method : {'iqr', 'zscore', 'std'}, default='iqr'
+        Statistical method to use for outlier detection:
+        - 'iqr': Interquartile Range method - robust to non-normal distributions
+        - 'zscore': Z-score method - assumes normally distributed data
+        - 'std': Standard Deviation method - assumes normally distributed data
     threshold : float, default=1.5
-        Threshold for outlier detection:
+        Sensitivity threshold for outlier detection:
         - For 'iqr': Values outside Q1 - threshold*IQR and Q3 + threshold*IQR are outliers
+          (typical values: 1.5 for suspected outliers, 3.0 for extreme outliers)
         - For 'zscore': Values with absolute Z-score > threshold are outliers
+          (typical values: 2.5-3.0)
         - For 'std': Values outside mean ± threshold*std are outliers
+          (typical values: 2.0-3.0)
 
-    Returns:
+    Returns
     -------
     dict
         Dictionary with column names as keys and DataFrames of outliers as values.
+        Each value also contains a 'summary' key with the statistical parameters used.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from dshelpertool.overview import find_outliers
+    >>> df = pd.DataFrame({
+    ...     'normal': [1, 2, 3, 4, 5],
+    ...     'with_outlier': [10, 12, 11, 50, 9]
+    ... })
+    >>> result = find_outliers(df, method='iqr', threshold=1.5)
+    >>> 'with_outlier' in result  # Should detect the outlier in this column
+    True
+    >>> len(result.get('normal', pd.DataFrame()))  # Should not have outliers
+    0
     """
+
     from scipy import stats
 
     # Select columns to analyze

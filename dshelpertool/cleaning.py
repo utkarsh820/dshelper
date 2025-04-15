@@ -7,22 +7,48 @@ import pandas as pd
 
 def update_col(df, rename_dict=None, standardize_col=False):
     """
-    Rename columns or standardize all column names.
+    Rename DataFrame columns or standardize all column names to a consistent format.
 
-    Parameters:
+    This function provides two ways to update column names:
+    1. Using a dictionary to map specific old column names to new ones
+    2. Automatically standardizing all column names to lowercase with underscores
+       replacing spaces (e.g., "First Name" becomes "first_name")
+
+    Parameters
     ----------
     df : pandas.DataFrame
-        The input DataFrame.
+        The DataFrame whose columns need to be renamed.
     rename_dict : dict, optional
         Mapping of current column names to new ones, e.g., {'Old Name': 'new_name'}
-    standardize_col : bool, optional
+    standardize_col : bool, default=False
         If True, standardize all column names to lowercase with underscores.
+        This overrides rename_dict if both are provided.
 
-    Returns:
+    Returns
     -------
     pandas.DataFrame
-        DataFrame with updated column names.
+        DataFrame with updated column names. The original DataFrame is not modified.
+
+    Raises
+    ------
+    ValueError
+        If neither rename_dict nor standardize_col is provided.
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from dshelpertool.cleaning import update_col
+    >>> df = pd.DataFrame({"First Name": ["John"], "Last Name": ["Doe"]})
+
+    # Using standardize_col
+    >>> update_col(df, standardize_col=True).columns.tolist()
+    ['first_name', 'last_name']
+
+    # Using rename_dict
+    >>> update_col(df, rename_dict={"First Name": "first", "Last Name": "last"}).columns.tolist()
+    ['first', 'last']
     """
+
     if standardize_col:
         df = df.rename(columns=lambda x: str(x).strip().lower().replace(" ", "_"))
     elif rename_dict:
@@ -323,28 +349,67 @@ def fix_data_types(
     text_cols=None,
 ):
     """
-    Fix data types in a DataFrame.
+    Automatically fix and optimize data types in a DataFrame.
 
-    Parameters:
+    This function can both automatically infer appropriate data types and explicitly
+    convert specified columns to desired types. It helps optimize memory usage and
+    ensures proper data handling by converting columns to their appropriate types.
+
+    Parameters
     ----------
     df : pandas.DataFrame
-        The input DataFrame.
+        The DataFrame whose data types need to be fixed.
     infer_types : bool, default=True
-        Whether to automatically infer data types.
-    numeric_cols : list, optional
-        List of columns to convert to numeric.
-    datetime_cols : list, optional
-        List of columns to convert to datetime.
-    category_cols : list, optional
-        List of columns to convert to categorical.
-    text_cols : list, optional
-        List of columns to ensure are string type.
+        Whether to automatically infer appropriate data types for columns not
+        explicitly specified in other parameters. The function uses heuristics to
+        determine the most appropriate type:
+        - Numeric: If >80% of values can be converted to numbers
+        - Datetime: If >80% of values can be parsed as dates
+        - Category: If column is object type with <10% unique values
+    numeric_cols : list of str, optional
+        List of column names to explicitly convert to numeric types.
+    datetime_cols : list of str, optional
+        List of column names to explicitly convert to datetime types.
+    category_cols : list of str, optional
+        List of column names to explicitly convert to categorical types.
+    text_cols : list of str, optional
+        List of column names to explicitly convert to string types.
 
-    Returns:
+    Returns
     -------
     pandas.DataFrame
-        DataFrame with fixed data types.
+        A new DataFrame with optimized data types. The original DataFrame
+        is not modified.
+
+    Notes
+    -----
+    - For columns that can't be converted to the specified type, the function
+      will use pandas' coercion rules (typically resulting in NaN values for
+      invalid conversions)
+    - The function prints a summary of all data type changes made
+
+    Examples
+    --------
+    >>> import pandas as pd
+    >>> from dshelpertool.cleaning import fix_data_types
+    >>> df = pd.DataFrame({
+    ...     'id': ['1', '2', '3'],
+    ...     'date': ['2021-01-01', '2021-02-01', '2021-03-01'],
+    ...     'category': ['A', 'B', 'A']
+    ... })
+    >>> fixed_df = fix_data_types(
+    ...     df,
+    ...     numeric_cols=['id'],
+    ...     datetime_cols=['date'],
+    ...     category_cols=['category']
+    ... )
+    >>> fixed_df.dtypes
+    id                 int64
+    date      datetime64[ns]
+    category        category
+    dtype: object
     """
+
     from pandas.api.types import is_datetime64_any_dtype, is_numeric_dtype
 
     df_fixed = df.copy()
