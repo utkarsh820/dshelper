@@ -1,13 +1,15 @@
 """
 Data cleaning examples for the dshelpertool package.
 """
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 
 # Import dshelpertool modules
 from dshelpertool import cleaning, dtypes, eda
+
 
 # Load a messy dataset
 def create_messy_data(rows=1000):
@@ -22,7 +24,7 @@ def create_messy_data(rows=1000):
         elif i % 25 == 0:  # 4% empty dates
             dates.append(None)
         else:
-            dates.append(pd.Timestamp('2021-01-01') + pd.Timedelta(days=i))
+            dates.append(pd.Timestamp("2021-01-01") + pd.Timedelta(days=i))
 
     # Create numeric columns with some invalid values
     numeric1 = []
@@ -39,7 +41,14 @@ def create_messy_data(rows=1000):
             numeric2.append(np.random.exponential(scale=10))
 
     # Create categorical columns with inconsistent values
-    categories = ['Category A', 'Category B', 'Category C', 'category a', 'category b', 'CATEGORY C']
+    categories = [
+        "Category A",
+        "Category B",
+        "Category C",
+        "category a",
+        "category b",
+        "CATEGORY C",
+    ]
     cat1 = np.random.choice(categories, size=rows)
 
     # Create a column with mixed types
@@ -65,16 +74,19 @@ def create_messy_data(rows=1000):
             text.append(f"Text with special chars: {i}!")
 
     # Create a DataFrame with messy column names
-    df = pd.DataFrame({
-        ' Date Column ': dates,
-        'Numeric Column 1': numeric1,
-        'Numeric-Column-2': numeric2,
-        'Categorical_Column': cat1,
-        'Mixed Types': mixed,
-        'TEXT WITH SPACES': text
-    })
+    df = pd.DataFrame(
+        {
+            " Date Column ": dates,
+            "Numeric Column 1": numeric1,
+            "Numeric-Column-2": numeric2,
+            "Categorical_Column": cat1,
+            "Mixed Types": mixed,
+            "TEXT WITH SPACES": text,
+        }
+    )
 
     return df
+
 
 # Create a messy DataFrame
 df_messy = create_messy_data()
@@ -108,8 +120,9 @@ print("Categorical column type:", df_clean["categorical_column"].dtype)
 
 # Step 3: Clean text data
 print("\n=== Step 3: Clean Text Data ===")
-df_clean = cleaning.clean_text(df_clean, columns=["text_with_spaces"],
-                              lower=True, strip=True, remove_special=True)
+df_clean = cleaning.clean_text(
+    df_clean, columns=["text_with_spaces"], lower=True, strip=True, remove_special=True
+)
 print("Cleaned text sample:")
 print(df_clean["text_with_spaces"].head())
 
@@ -117,15 +130,16 @@ print(df_clean["text_with_spaces"].head())
 print("\n=== Step 4: Standardize Categorical Values ===")
 # Create a mapping for standardizing categories
 category_mapping = {
-    'Category A': 'category_a',
-    'Category B': 'category_b',
-    'Category C': 'category_c',
-    'category a': 'category_a',
-    'category b': 'category_b',
-    'CATEGORY C': 'category_c'
+    "Category A": "category_a",
+    "Category B": "category_b",
+    "Category C": "category_c",
+    "category a": "category_a",
+    "category b": "category_b",
+    "CATEGORY C": "category_c",
 }
-df_clean = cleaning.replace_values(df_clean, columns=["categorical_column"],
-                                  to_replace=category_mapping)
+df_clean = cleaning.replace_values(
+    df_clean, columns=["categorical_column"], to_replace=category_mapping
+)
 print("Standardized categories:")
 print(df_clean["categorical_column"].value_counts())
 
@@ -136,8 +150,9 @@ missing_before = df_clean.isnull().sum().sum()
 print(f"Missing values before: {missing_before}")
 
 # Fill missing values in numeric columns with mean
-df_clean = eda.fill_missing(df_clean, method="mean",
-                           cols=["numeric_column_1", "numeric_column_2"])
+df_clean = eda.fill_missing(
+    df_clean, method="mean", cols=["numeric_column_1", "numeric_column_2"]
+)
 
 # Fill missing values in date column with forward fill
 df_clean = eda.fill_missing(df_clean, method="ffill", cols=["date_column"])
@@ -161,17 +176,20 @@ print(f"Shape after removing duplicates: {df_clean.shape}")
 print("\n=== Step 7: Handle Outliers ===")
 # Add some outliers for demonstration
 df_clean.loc[0, "numeric_column_1"] = 1000  # Far from the mean of ~50
-df_clean.loc[1, "numeric_column_2"] = 500   # Far from the mean of ~10
+df_clean.loc[1, "numeric_column_2"] = 500  # Far from the mean of ~10
 
 # Detect outliers
 from dshelpertool import stats
-outliers, outlier_counts = stats.outlier_detection(df_clean,
-                                                 cols=["numeric_column_1", "numeric_column_2"],
-                                                 method="iqr")
+
+outliers, outlier_counts = stats.outlier_detection(
+    df_clean, cols=["numeric_column_1", "numeric_column_2"], method="iqr"
+)
 
 print("Outlier counts:")
 for col, info in outlier_counts.items():
-    print(f"- {col}: {info['outlier_count']} outliers ({info['outlier_percentage']:.2f}%)")
+    print(
+        f"- {col}: {info['outlier_count']} outliers ({info['outlier_percentage']:.2f}%)"
+    )
 
 # Replace outliers with column median
 for col in ["numeric_column_1", "numeric_column_2"]:

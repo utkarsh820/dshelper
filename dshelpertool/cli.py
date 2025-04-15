@@ -1,12 +1,23 @@
 """
 Command-line interface for the dshelpertool package.
 """
+
 import argparse
 import os
 import sys
+
 import pandas as pd
-from dshelpertool import __version__
-from dshelpertool import overview, cleaning, dtypes, eda, stats, viz, report
+
+from dshelpertool import (
+    __version__,
+    cleaning,
+    dtypes,
+    eda,
+    overview,
+    report,
+    stats,
+    viz,
+)
 
 
 def main():
@@ -27,20 +38,14 @@ def main():
     overview_parser = subparsers.add_parser(
         "overview", help="Get a quick overview of a DataFrame"
     )
-    overview_parser.add_argument(
-        "file", help="Path to the CSV or Excel file"
-    )
+    overview_parser.add_argument("file", help="Path to the CSV or Excel file")
     overview_parser.add_argument(
         "--name", help="Name of the DataFrame", default="DataFrame"
     )
 
     # Clean command
-    clean_parser = subparsers.add_parser(
-        "clean", help="Clean a DataFrame"
-    )
-    clean_parser.add_argument(
-        "file", help="Path to the CSV or Excel file"
-    )
+    clean_parser = subparsers.add_parser("clean", help="Clean a DataFrame")
+    clean_parser.add_argument("file", help="Path to the CSV or Excel file")
     clean_parser.add_argument(
         "--standardize", action="store_true", help="Standardize column names"
     )
@@ -52,19 +57,17 @@ def main():
     report_parser = subparsers.add_parser(
         "report", help="Generate a report for a DataFrame"
     )
-    report_parser.add_argument(
-        "file", help="Path to the CSV or Excel file"
-    )
+    report_parser.add_argument("file", help="Path to the CSV or Excel file")
     report_parser.add_argument(
         "--title", help="Title of the report", default="Data Report"
     )
     report_parser.add_argument(
-        "--format", choices=["html", "markdown", "text"], default="html",
-        help="Format of the report"
+        "--format",
+        choices=["html", "markdown", "text"],
+        default="html",
+        help="Format of the report",
     )
-    report_parser.add_argument(
-        "--output", help="Path to save the report", default=None
-    )
+    report_parser.add_argument("--output", help="Path to save the report", default=None)
     report_parser.add_argument(
         "--plots", action="store_true", help="Include plots in the report"
     )
@@ -124,7 +127,7 @@ def main():
             title=args.title,
             include_plots=args.plots,
             output_format=args.format,
-            output_path=args.output
+            output_path=args.output,
         )
 
         # If output_path is None, print the report

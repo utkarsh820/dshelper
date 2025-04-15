@@ -5,21 +5,29 @@ DSHelperTool: A lightweight helper package for data science and analysis tasks.
 
 __version__ = "0.1.0"
 
-from . import overview
-from . import cleaning
-from . import dtypes
-from . import eda
-from . import stats
-from . import viz
-from . import report
-from . import easter_egg
+from . import cleaning, dtypes, easter_egg, eda, overview, report, stats, viz
+from .cleaning import drop_cols, update_col
+from .dtypes import to_datetime_cols, to_numeric_cols
+from .easter_egg import fortune_cookie
+from .eda import check_skew, fill_missing, plot_skew
 
 # Import commonly used functions for easier access
-from .overview import quick_look, get_duplicates, value_counts_all
-from .cleaning import update_col, drop_cols
-from .dtypes import to_numeric_cols, to_datetime_cols
-from .eda import check_skew, plot_skew, fill_missing
-from .stats import describe_all, group_stats, outlier_detection, hypothesis_test, correlation_matrix
-from .viz import plot_missing, plot_distributions, plot_categorical, plot_correlation, plot_boxplots, plot_scatter_matrix, plot_time_series, plot_group_comparison
-from .report import generate_summary_report, export_to_excel, generate_data_dictionary
-from .easter_egg import fortune_cookie
+from .overview import get_duplicates, quick_look, value_counts_all
+from .report import export_to_excel, generate_data_dictionary, generate_summary_report
+from .stats import (
+    correlation_matrix,
+    describe_all,
+    group_stats,
+    hypothesis_test,
+    outlier_detection,
+)
+from .viz import (
+    plot_boxplots,
+    plot_categorical,
+    plot_correlation,
+    plot_distributions,
+    plot_group_comparison,
+    plot_missing,
+    plot_scatter_matrix,
+    plot_time_series,
+)

@@ -1,13 +1,15 @@
 """
 Basic usage examples for the dshelpertool package.
 """
-import pandas as pd
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import seaborn as sns
 
 # Import dshelpertool modules
-from dshelpertool import overview, cleaning, dtypes, eda, stats, viz
+from dshelpertool import cleaning, dtypes, eda, overview, stats, viz
+
 
 # Create a sample DataFrame
 def create_sample_data(rows=1000):
@@ -15,7 +17,7 @@ def create_sample_data(rows=1000):
     np.random.seed(42)
 
     # Create a date range
-    dates = pd.date_range('2021-01-01', periods=rows)
+    dates = pd.date_range("2021-01-01", periods=rows)
 
     # Create numeric columns with different distributions
     normal = np.random.normal(loc=50, scale=10, size=rows)
@@ -23,7 +25,7 @@ def create_sample_data(rows=1000):
     uniform = np.random.uniform(low=0, high=100, size=rows)
 
     # Create categorical columns
-    categories = ['A', 'B', 'C', 'D', 'E']
+    categories = ["A", "B", "C", "D", "E"]
     cat1 = np.random.choice(categories, size=rows, p=[0.4, 0.3, 0.15, 0.1, 0.05])
     cat2 = np.random.choice(categories, size=rows)
 
@@ -31,15 +33,17 @@ def create_sample_data(rows=1000):
     boolean = np.random.choice([True, False], size=rows)
 
     # Create a DataFrame
-    df = pd.DataFrame({
-        'date': dates,
-        'normal': normal,
-        'skewed': skewed,
-        'uniform': uniform,
-        'category1': cat1,
-        'category2': cat2,
-        'boolean': boolean
-    })
+    df = pd.DataFrame(
+        {
+            "date": dates,
+            "normal": normal,
+            "skewed": skewed,
+            "uniform": uniform,
+            "category1": cat1,
+            "category2": cat2,
+            "boolean": boolean,
+        }
+    )
 
     # Add some missing values
     for col in df.columns:
@@ -47,6 +51,7 @@ def create_sample_data(rows=1000):
         df.loc[mask, col] = np.nan
 
     return df
+
 
 # Create a sample DataFrame
 df = create_sample_data()
@@ -73,7 +78,9 @@ eda.check_skew(df_clean, cols=["normal", "skewed", "uniform"])
 # Example 5: Analyze correlations
 print("\n=== Example 5: Correlation Analysis ===")
 numeric_cols = ["normal", "skewed", "uniform"]
-corr_matrix = stats.correlation_matrix(df_clean, method="pearson", min_corr=0.1, plot=False)
+corr_matrix = stats.correlation_matrix(
+    df_clean, method="pearson", min_corr=0.1, plot=False
+)
 print("Correlation matrix:")
 print(corr_matrix)
 
@@ -89,10 +96,14 @@ viz.plot_categorical(df_clean, cols=["category1", "category2"])
 
 # Example 8: Find and handle outliers
 print("\n=== Example 8: Find and Handle Outliers ===")
-outliers, outlier_counts = stats.outlier_detection(df_clean, cols=numeric_cols, method="iqr")
+outliers, outlier_counts = stats.outlier_detection(
+    df_clean, cols=numeric_cols, method="iqr"
+)
 print("Outlier counts:")
 for col, info in outlier_counts.items():
-    print(f"- {col}: {info['outlier_count']} outliers ({info['outlier_percentage']:.2f}%)")
+    print(
+        f"- {col}: {info['outlier_count']} outliers ({info['outlier_percentage']:.2f}%)"
+    )
 
 # Example 9: Fill missing values
 print("\n=== Example 9: Fill Missing Values ===")
