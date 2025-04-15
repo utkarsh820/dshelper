@@ -14,8 +14,8 @@ multi_line_output = 3
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"
-addopts = "--cov=dshelper --cov-report=xml --cov-report=term-missing"
+addopts = "--cov=dshelpertool --cov-report=xml --cov-report=term-missing"
 
 [tool.coverage.run]
-source = ["dshelper"]
+source = ["dshelpertool"]
 omit = ["tests/*", "setup.py"]

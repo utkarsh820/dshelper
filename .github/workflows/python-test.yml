@@ -33,13 +33,13 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Check formatting with black
       run: |
-        black --check dshelper tests
+        black --check dshelpertool tests
     - name: Check imports with isort
       run: |
-        isort --check-only --profile black dshelper tests
+        isort --check-only --profile black dshelpertool tests
     - name: Test with pytest
       run: |
-        pytest --cov=dshelper tests/
+        pytest --cov=dshelpertool tests/
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
